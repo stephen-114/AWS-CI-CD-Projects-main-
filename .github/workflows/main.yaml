@@ -87,6 +87,12 @@ jobs:
           docker stop mltest || true
           docker rm mltest || true
 
+      - name: Free disk space before pulling image
+        run: |
+          docker image rm ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest || true
+          docker image prune -f || true
+          docker builder prune -f || true
+
       - name: Pull latest images
         run: |
           docker pull ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
